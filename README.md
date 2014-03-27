@@ -3,8 +3,9 @@ ANUBIS-altcoin
 
 Fork of the existing ANUBIS project with support for Doge.
 
-First upload complete...  ensure you create accounts named DOGE and BTC
+First upload complete...  ensure you create account groups named BTC and DOGE (ALL CAPS PLOX)
 
+anxpro api took a shit as i was running the final tests on the current 'build' so I didn't get a proper test but it should work fine.
 
 You need a working LAMP setup.  It might work with windows, i don't know and i don't care to test.
 You need a working CGminer (Kalroth fork is what i'm testing against).
@@ -26,6 +27,11 @@ Plug those values in to config.inc.php
 
 Open a browser to wherever you unpacked ANUBIS-altcoin.  http://your.ANUBIS-altcoin.ip.orHOST/ANUBIS-altcoin/directory/if/it/is/not/the/root/
 
+Create a cron script pointing at the wallet_update.php file along the lines of:
+
+     */1 * * * * php /var/www/ANUBIS-TEST/wallet_update.php
+
+
 The rest is pretty self-explanatory.
 
 The accounts page will get slower and slower with each wallet you add to it.  It has to do a request to blockchain.info for each wallet.  3 requests for each dogechain.info wallet.  Shit adds up quick.
@@ -36,7 +42,7 @@ Krezdorn.  do work!
 
 ROADMAP:
 
-1: Post wallet data to mysql db.  to cron or not to cron, that is the question.
+1: <strike>Post wallet data to mysql db.  to cron or not to cron, that is the question.</strike>
 
 2: Secure login system.  sha-256+salt to session should do the trick.  in the meantime, set up .htaccess or something.
 
