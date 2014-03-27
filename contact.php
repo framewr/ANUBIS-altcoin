@@ -70,7 +70,10 @@ ddsmoothmenu.init({
 			<td>Many thanks to the orginator OCminer for starting the project. His donation address is: 1KgAKimMrbR6h4R6JBff9s3JqQCS53y149</td>
         </tr>
         <tr>
-			<td>Accounts information retireved from <a href="http://www.blockchain.info/">Blockchain.info</a> and <strike><a href="https://mtgox.com/">Mt.Gox</a> </strike> <a href="https://anxpro.com">ANXPro</a> APIs</td>
+			<td>Accounts information retireved from <a href="http://www.blockchain.info/">Blockchain.info</a>, along with <a href="http://www.dogechain.info">Dogechain</a> and <strike><a href="https://mtgox.com/">Mt.Gox</a> </strike> <a href="https://anxpro.com">ANXPro</a> APIs</td>
+        </tr>
+        <tr>
+        	<td>can the ANUBIS-altcoin devs get some love too?  DMJWnz4YkpyqVUUMM2GNbt6FmjfkcgnM58</td>
         </tr>
 
     </thead>

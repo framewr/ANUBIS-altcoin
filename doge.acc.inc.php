@@ -1,4 +1,5 @@
 <?php
+// DEPRACATED IN FAVOR OF DB stuffs....  this should be deleted.
 error_reporting('E_ALL');
 ini_set('display_errors','On'); 
 

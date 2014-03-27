@@ -1,7 +1,7 @@
 <?php
 require("config.inc.php");
 require("acc.inc.php");
-require("doge.acc.inc.php");
+//require("doge.acc.inc.php");
 
 $dbh = anubis_db_connect();
 
@@ -14,6 +14,8 @@ while ($row = $result->fetch(PDO::FETCH_NUM))
     $gotaccountstbl = 1;
   if ($row[0] == "accgroups")
     $gotgroupstbl = 1;
+  if ($row[0] == "exchanges")
+  	$gotexchangestbl = 1;
 }
 
 if (!isset($gotaccountstbl))
@@ -21,6 +23,9 @@ if (!isset($gotaccountstbl))
 
 if (!isset($gotgroupstbl))
   create_accgroups_table();
+
+if (!isset($gotexchangestbl))
+  create_exchanges_table();
 
 db_error();
 
@@ -65,6 +70,19 @@ if (isset($_POST['delete']))
       db_error();    
     }
 }
+
+// get some vars set for displaying later on...
+$btc_info = get_coin_info($dbh, $group = '1');
+$btc_exchange = $btc_info['name'];
+$btc_value = $btc_info['value'];
+$btc_updated = $btc_info['updated'];
+
+$doge_info = get_coin_info($dbh, $group = '2');
+$doge_exchange = $doge_info['name'];
+$doge_value = $doge_info['value'];
+$doge_updated = $doge_info['updated'];
+
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -113,80 +131,104 @@ ddsmoothmenu.init({
             	<h2>Accounts</h2>
                 <div class="cleaner h20"></div>
 
-<?php
 
-
-$grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'BTC' ORDER BY name ASC");
-  db_error();
-
-if ($grp_result)
-{
-
-	while ($group_data = $grp_result->fetch(PDO::FETCH_ASSOC))
-	{
-        $group_id = $group_data['id'];
-        echo "<form name=add action='accounts.php' method='post'>";
-        echo "<table id='rounded-corner' summary='GroupSummary'>";
-        echo create_group_header($group_data);
-        
-        $acc_result = $dbh->query("SELECT * FROM accounts WHERE `group` = '".$group_id."' ORDER BY name ASC");
-        db_error();        
-        if ($acc_result)
-        {
-          while ($acc_data = $acc_result->fetch(PDO::FETCH_ASSOC))
-          {
-            echo get_acc_summary($acc_data, $group_data);
-          }
-        }
-        
-        echo create_group_totals();
-	    echo "</table>";
-	    echo "</form>";
-    }
-
-}
-
-// do DOGE here
-$grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'DOGE' ORDER BY name ASC");
-  db_error();
-
-if ($grp_result)
-{
-
-	while ($group_data = $grp_result->fetch(PDO::FETCH_ASSOC))
-	{
-        $group_id = $group_data['id'];
-        echo "<form name=add action='accounts.php' method='post'>";
-        echo "<table id='rounded-corner' summary='GroupSummary'>";
-        echo create_group_header_doge($group_data);
-        
-        $acc_result = $dbh->query("SELECT * FROM accounts WHERE `group` = '".$group_id."' ORDER BY name ASC");
-        db_error();        
-        if ($acc_result)
-        {
-          while ($acc_data = $acc_result->fetch(PDO::FETCH_ASSOC))
-          {
-            echo get_acc_summary_doge($acc_data, $group_data);
-          }
-        }
-        
-        echo create_group_totals_doge();
-	    echo "</table>";
-	    echo "</form>";
-    }
-
-}
-
-
-
-
-
-$currency_list = "";
-foreach($mtgox_currencys as $symbol)
-  $currency_list .= "<option>" . $symbol . "</option>";
-
-?>
-
+<form name=add action='accounts.php' method='post'>
+	<table id='rounded-corner' summary='GroupSummary'>
+		<tr>
+			<th colspan='7'>฿TC</th>
+		</tr>
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<th>
+				Account Name
+			</th>
+			<th>
+				Account Address
+			</th>
+			<th>
+				Received
+			</th>
+			<th>
+				Sent
+			</th>
+			<th>
+				Balance
+			</th>
+			<th>
+				1฿ = USD $<? echo $btc_value; ?>
+			</th>
+		</tr>
+			<? get_print_wallets($group = '1'); ?>
+		<tr>
+			<th>
+				<input type='checkbox' name='deletegrp' value='1'>
+			</th>
+		
+			<? get_coin_totals($group = '1'); ?>
+		</tr>
+		<tr>
+    		<th colspan='7'>
+      			Name: <input type='text' name='name'>&nbsp;
+      			Address: <input type='text' name='address'>&nbsp;
+      			<input type='submit' value='Add Account' name='addacc'>
+      			<input type='hidden' name='groupid' value='1'>
+      			&nbsp; &nbsp;
+      			<input type='submit' value='Delete selected' name='delete'>
+    		</th>
+  		</tr>
+  </table>
+</form>
+<!-- do the DOGE -->
+<form name=add action='accounts.php' method='post'>
+	<table id='rounded-corner' summary='GroupSummary'>
+		<tr>
+			<th colspan='7'>ÐOGE</th>
+		</tr>
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<th>
+				Account Name
+			</th>
+			<th>
+				Account Address
+			</th>
+			<th>
+				Received
+			</th>
+			<th>
+				Sent
+			</th>
+			<th>
+				Balance
+			</th>
+			<th>
+				1Ð = USD $<? echo $doge_value; ?>
+			</th>
+		</tr>
+			<? get_print_wallets($group = '2'); ?>
+		<tr>
+			<th>
+				<input type='checkbox' name='deletegrp' value='1'>
+			</th>
+		
+			<? get_coin_totals($group = '2'); ?>
+		</tr>
+		<tr>
+    		<th colspan='7'>
+      			Name: <input type='text' name='name'>&nbsp;
+      			Address: <input type='text' name='address'>&nbsp;
+      			<input type='submit' value='Add Account' name='addacc'>
+      			<input type='hidden' name='groupid' value='2'>
+      			&nbsp; &nbsp;
+      			<input type='submit' value='Delete selected' name='delete'>
+    		</th>
+  		</tr>
+  </table>
+</form>
 <form name=save action="accounts.php" method="post">
 <table id="savetable" align=center>
     <thead>
@@ -197,14 +239,13 @@ foreach($mtgox_currencys as $symbol)
         </tr>
         <tr>
           <td align=center><input type="text" name="name" value=""></td>
-          <td align=center><select name="currency"><?php echo $currency_list; ?><select></td>
+          <td align=center><select name="currency"><option>USD</option><option>GBP</option><option>EUR</option><option>AUD</option><option>CAD</option><option>CHF</option><option>CNY</option><option>DKK</option><option>HKD</option><option>JPY</option><option>NZD</option><option>PLN</option><option>RUB</option><option>SEK</option><option>SGD</option><option>THB</option><select></td>
           <td colspan=2 align=center><input type="submit" value="Add new group" name="addgroup"></td>
         </tr>
     </thead>
 </table>
 
 </form>
-                
                 <div class="cleaner h20"></div>
 <!--                 <a href="#" class="more float_r"></a> -->
             </div>

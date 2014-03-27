@@ -1,9 +1,7 @@
 <?php
 
-// a work in progress
-
 require("config.inc.php");
-
+require("acc.inc.php");
 // set up db connection
 $dbh = anubis_db_connect();
 
@@ -99,29 +97,7 @@ if ($grp_result)
 
 }
 
-
-// wrote this in the wrong place....  this goes in viewable functions, not cron stuffs
-function get_coin_info($dbh, $group)
-{
-	$infos_q = $dbh->query("SELECT * FROM `exchanges` WHERE `group` = '1' LIMIT 1");
-	db_error();
-	if ($infos_q)
-	  {
-	  while ($infos_q_data = $infos_q->fetch(PDO::FETCH_ASSOC))
-	    {
-		  $coin_info['value'] = $infos_q_data['value'];
-		  $coin_info['updated'] = $infos_q_data['updated'];
-		  return $coin_info;
-		}
-	  }
-	  
-}
-
-/*
-$datas = get_coin_info($dbh, '1'); 
-var_dump($datas);
-die();
-*/
+// seems i forgot to implement this function....
 function wallet_update($address, $received, $sent, $balance, $value)
 {
 	$updq = "UPDATE accounts SET received = '$received', sent = '$sent', balance = '$balance' WHERE address = '$address'";
@@ -164,9 +140,8 @@ if ($account_result)
 			$updq = "UPDATE accounts SET received = '$btc_received', sent = '$btc_sent', balance = '$btc_balance', value = '$btc_value', updated = now() WHERE address = '$address'";
 			$updr = $dbh->exec($updq);
 			db_error();
-			echo "$address \n";
-			echo "$updq \n";
 		}
+		// see if it's a DOGE wallet and react
 		if ($group == '2')
 		{
 			GLOBAL $opts;
@@ -184,7 +159,6 @@ if ($account_result)
 			$updq = "UPDATE accounts SET received = '$doge_received', sent = '$doge_sent', balance = '$doge_balance', value = '$doge_value', updated = now() WHERE address = '$address'";
 			$updr = $dbh->exec($updq);
 			db_error();
-			echo "$updq \n";
 		}
 	}
 }
