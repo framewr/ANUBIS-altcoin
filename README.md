@@ -34,15 +34,13 @@ Create a cron script pointing at the wallet_update.php file along the lines of:
 
 The rest is pretty self-explanatory.
 
-The accounts page will get slower and slower with each wallet you add to it.  It has to do a request to blockchain.info for each wallet.  3 requests for each dogechain.info wallet.  Shit adds up quick.
-
-I'm working on fixing that now by logging that info to the db in the background and serving up pages via the database.  quicker results for the webpage at the cost of not exactly up to the second data.
+All account data is logged to the db for quick retrieval via your browser.  No more slow polls to block explorers and exchanges.
 
 Krezdorn.  do work!
 
 ROADMAP:
 
-1: <strike>Post wallet data to mysql db.  to cron or not to cron, that is the question.</strike>
+1: DONE! Post wallet data to mysql db.  to cron or not to cron, that is the question.
 
 2: Secure login system.  sha-256+salt to session should do the trick.  in the meantime, set up .htaccess or something.
 
