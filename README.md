@@ -42,7 +42,7 @@ ROADMAP:
 
 1: DONE! Post wallet data to mysql db.  to cron or not to cron, that is the question.
 
-2: Secure login system.  sha-256+salt to session should do the trick.  in the meantime, set up .htaccess or something.
+2: DONE! forgot the salt, but fuck it.... Secure login system.  sha-256+salt to session should do the trick.  in the meantime, set up .htaccess or something.
 
 3: Simplify the hardware screens.  too much data and it seems mostly incoherent to most.
 
@@ -50,7 +50,7 @@ ROADMAP:
 
 5: Enable multiple exchanges.  Cause fuck cryptsy?
 
-6: Put proper symbol next to currency..  the fancy B for BTC, D for DOGE, etc..  this one might not scale too easy, so many damn alt-coins.
+6: DONE! at least for the first two... Put proper symbol next to currency..  the fancy B for BTC, D for DOGE, etc..  this one might not scale too easy, so many damn alt-coins.
 
 7: General beautification.
 
