@@ -4,6 +4,13 @@ require("func.inc.php");
 
 $dbh = anubis_db_connect();
 
+session_start();
+if ( !is_logged_in() )
+	{
+		header('Location: login.php');
+	}
+
+/*
 $result = $dbh->query($show_tables);
 db_error();
 
@@ -20,7 +27,7 @@ if (!isset($gotconfigtbl))
 
 if (!isset($gothoststbl))
 	include("hoststbl.sql.php");
-
+*/
 
 $config = get_config_data();
 
@@ -75,7 +82,6 @@ ddsmoothmenu.init({
                 <div class="cleaner h20"></div>
 
 <?php
-
 
 $result = $dbh->query("SELECT * FROM hosts ORDER BY name ASC");
 if ($result)

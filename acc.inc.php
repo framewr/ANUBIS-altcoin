@@ -124,7 +124,7 @@ function get_coin_totals($group)
     <th>$total_coin_received</th>
     <th>$total_coin_sent</th>
     <th>$total_coin_balance</th>
-    <th>$total_coin_value</th>
+    <th>\$$total_coin_value</th>
   ";
  echo $line;
 }

@@ -1,10 +1,22 @@
 <?php
+
+
+if (is_logged_in())
+{
+	$log_page = "logout.php";
+	$log_desc = "Logout";
+}
+else 	{
+		$log_page = "login.php";
+		$log_desc = "Login";
+		}
+
 $pages = array("Home" => "index.php",
              "Accounts" => "accounts.php",
              "Configuration" => "config.php",
              "FAQ" => "faq.php",
              "Contact/Donate" => "contact.php",
-			 "IFMI" => "/");
+			 "$log_desc" => "$log_page");
 
 $page = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
 ?>
@@ -23,8 +35,13 @@ $page = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
           $selected = "";
 
         echo "<li><a href='".$value."' ".$selected.">".$key."</a></li>";
+
+		
       }
 ?>
+
+
+		
     </ul>
     <br style="clear: left" />
   </div> <!-- end of templatemo_menu -->

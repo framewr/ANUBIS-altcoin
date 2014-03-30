@@ -5,29 +5,11 @@ require("acc.inc.php");
 
 $dbh = anubis_db_connect();
 
-$result = $dbh->query($show_tables);
-db_error();
-
-while ($row = $result->fetch(PDO::FETCH_NUM))
-{
-  if ($row[0] == "accounts")
-    $gotaccountstbl = 1;
-  if ($row[0] == "accgroups")
-    $gotgroupstbl = 1;
-  if ($row[0] == "exchanges")
-  	$gotexchangestbl = 1;
-}
-
-if (!isset($gotaccountstbl))
-  create_accounts_table();
-
-if (!isset($gotgroupstbl))
-  create_accgroups_table();
-
-if (!isset($gotexchangestbl))
-  create_exchanges_table();
-
-db_error();
+session_start();
+if ( !is_logged_in() )
+	{
+		header('Location: login.php');
+	}
 
 
 if (isset($_POST['addgroup']))
@@ -135,7 +117,7 @@ ddsmoothmenu.init({
 <form name=add action='accounts.php' method='post'>
 	<table id='rounded-corner' summary='GroupSummary'>
 		<tr>
-			<th colspan='7'>฿TC</th>
+			<th colspan='7'>฿TC <em>as of <? echo $btc_updated; ?></em></th>
 		</tr>
 		<tr>
 			<th>
@@ -184,7 +166,7 @@ ddsmoothmenu.init({
 <form name=add action='accounts.php' method='post'>
 	<table id='rounded-corner' summary='GroupSummary'>
 		<tr>
-			<th colspan='7'>ÐOGE</th>
+			<th colspan='7'>ÐOGE <em>as of <? echo $doge_updated; ?></em></th>
 		</tr>
 		<tr>
 			<th>

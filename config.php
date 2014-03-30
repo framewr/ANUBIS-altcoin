@@ -3,6 +3,12 @@ require("config.inc.php");
 
 $dbh = anubis_db_connect();
 
+session_start();
+if ( !is_logged_in() )
+	{
+		header('Location: login.php');
+	}
+
 if (isset($_POST['saveconf'])) {
 	$updstring = "";
 
