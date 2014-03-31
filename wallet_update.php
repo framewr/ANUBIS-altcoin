@@ -132,7 +132,12 @@ if ($grp_result)
 	$url_data = file_get_contents($cryptsy_url,false,$context);
 	$cryptsy_arr = json_decode($url_data, true);
 	
-	$POT_exchange_rate = $cryptsy_arr['return']['markets']['POT']['lasttradeprice'];
+	//$POT_exchange_rate = $cryptsy_arr['return']['markets']['POT']['lasttradeprice'];
+	
+	foreach ($cryptsy_arr['return']['markets']['POT']['recenttrades'] as $recenttrades )
+	{ $POT_exchange_rate = $recenttrades['price']; break; }
+	
+	
 	GLOBAL $POT_exchange_rate;
 		$updq = "UPDATE exchanges SET value = '$POT_exchange_rate', updated =now() WHERE name = 'POT'";
 		$updr = $dbh->exec($updq);
