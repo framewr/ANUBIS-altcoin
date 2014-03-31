@@ -64,6 +64,10 @@ $doge_exchange = $doge_info['name'];
 $doge_value = $doge_info['value'];
 $doge_updated = $doge_info['updated'];
 
+$pot_info = get_coin_info($dbh, $group = '3');
+$pot_exchange = $pot_info['name'];
+$pot_value = $pot_info['value'];
+$pot_updated = $pot_info['updated'];
 
 
 ?>
@@ -205,6 +209,55 @@ ddsmoothmenu.init({
       			Address: <input type='text' name='address'>&nbsp;
       			<input type='submit' value='Add Account' name='addacc'>
       			<input type='hidden' name='groupid' value='2'>
+      			&nbsp; &nbsp;
+      			<input type='submit' value='Delete selected' name='delete'>
+    		</th>
+  		</tr>
+  </table>
+</form>
+<!-- do the POT -->
+<form name=add action='accounts.php' method='post'>
+	<table id='rounded-corner' summary='GroupSummary'>
+		<tr>
+			<th colspan='7'>POT <em>as of <? echo $pot_updated; ?></em></th>
+		</tr>
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<th>
+				Account Name
+			</th>
+			<th>
+				Account Address
+			</th>
+			<th>
+				Received
+			</th>
+			<th>
+				Sent
+			</th>
+			<th>
+				Balance
+			</th>
+			<th>
+				1POT = ฿TC <? echo $pot_value; ?> 
+			</th>
+		</tr>
+			<? get_print_wallets($group = '3'); ?>
+		<tr>
+			<th>
+				<input type='checkbox' name='deletegrp' value='1'>
+			</th>
+		
+			<? get_coin_totals($group = '3'); ?>
+		</tr>
+		<tr>
+    		<th colspan='7'>
+      			Name: <input type='text' name='name'>&nbsp;
+      			Address: <input type='text' name='address'>&nbsp;
+      			<input type='submit' value='Add Account' name='addacc'>
+      			<input type='hidden' name='groupid' value='3'>
       			&nbsp; &nbsp;
       			<input type='submit' value='Delete selected' name='delete'>
     		</th>

@@ -46,7 +46,9 @@ function get_print_wallets($group)
 		  if ($group == '1')
 		  $a_url = "http://www.blockchain.info/address/";
 		  if ($group == '2')
-		  $a_url = "http://www.dogechiain.info/address/";
+		  $a_url = "http://www.dogechain.info/address/";
+		  if ($group == '3')
+		  $a_url = "http://potchain.aprikos.net/address/";
 		  $line = "
 		  		<tr>
 		  			<td>

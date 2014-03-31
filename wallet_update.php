@@ -38,8 +38,23 @@ $blockchain_addr_path_balance = 'chain/Dogecoin/q/addressbalance/';
 $blockchain_addr_path_received = 'chain/Dogecoin/q/getreceivedbyaddress/';
 $blockchain_addr_path_sent = 'chain/Dogecoin/q/getsentbyaddress/';
 $blockchain_addr_path_doge = 'address/';
+// POT <--why the fuck do we need a whole request for each value...  ugh.
 
-
+// make blockchain more extensible?
+function blockchain_paths($coin)
+{
+	if ($coin == 'POT')
+	{
+	$blockchain['url'] = 'http://potchain.aprikos.net/';
+	$blockchain['addr_options'] = '';
+	$blockchain['addr_path_balance'] = 'chain/Potcoin/q/addressbalance/';
+	$blockchain['addr_path_received'] = 'chain/Potcoin/q/getreceivedbyaddress/';
+	$blockchain['addr_path_sent'] = 'chain/Potcoin/q/getsentbyaddress/';
+	$blockchain['addr_path'] = 'address/';
+	return $blockchain;
+	}
+	
+}
 
 
 
@@ -96,6 +111,25 @@ if ($grp_result)
       db_error();
 
 }
+
+$grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'POT' ORDER BY name ASC");
+  db_error();
+
+if ($grp_result)
+{
+	$cryptsy_url = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=173";
+	$context = stream_context_create($opts);
+	$url_data = file_get_contents($cryptsy_url,false,$context);
+	$cryptsy_arr = json_decode($url_data, true);
+	
+	$POT_exchange_rate = $cryptsy_arr['return']['markets']['POT']['lasttradeprice'];
+	GLOBAL $POT_exchange_rate;
+		$updq = "UPDATE exchanges SET value = '$POT_exchange_rate', updated =now() WHERE name = 'POT'";
+		$updr = $dbh->exec($updq);
+		db_error();
+}
+
+
 
 // seems i forgot to implement this function....
 function wallet_update($address, $received, $sent, $balance, $value)
@@ -157,6 +191,28 @@ if ($account_result)
 			$doge_info = get_coin_info($dbh, $group = '2');
 			$doge_value = $doge_info['value'] * $doge_balance;
 			$updq = "UPDATE accounts SET received = '$doge_received', sent = '$doge_sent', balance = '$doge_balance', value = '$doge_value', updated = now() WHERE address = '$address'";
+			$updr = $dbh->exec($updq);
+			db_error();
+		}
+		// see if it's a POT wallet and react
+		if ($group == '3')
+		{
+			GLOBAL $opts;
+			$blockchain_paths = blockchain_paths('POT');
+			$url = $blockchain_paths['url'] . $blockchain_paths['addr_path_received'] . $address;
+			$context  = stream_context_create($opts);
+			$coin_received = file_get_contents($url,false,$context);
+			$url = $blockchain_paths['url'] . $blockchain_paths['addr_path_sent'] . $address;
+			$context  = stream_context_create($opts);
+			$coin_sent = file_get_contents($url,false,$context);
+			$url = $blockchain_paths['url'] . $blockchain_paths['addr_path_balance'] . $address;
+			$context  = stream_context_create($opts);
+			$coin_balance= file_get_contents($url,false,$context);
+			$coin_info = get_coin_info($dbh, $group = '3');
+			$btc_coin_value = $coin_info['value'] * $coin_balance;
+			$btc_info = get_coin_info($dbh, $group = '1');
+			$coin_value = $btc_info['value'] * $btc_coin_value;
+			$updq = "UPDATE accounts SET received = '$coin_received', sent = '$coin_sent', balance = '$coin_balance', value = '$coin_value', updated = now() WHERE address = '$address'";
 			$updr = $dbh->exec($updq);
 			db_error();
 		}
