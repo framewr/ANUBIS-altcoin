@@ -1,11 +1,8 @@
 ANUBIS-altcoin
 ==============
 
-Fork of the existing ANUBIS project with support for Doge.
+Fork of the existing ANUBIS project with support for Doge and POT.
 
-First upload complete...  ensure you create account groups named BTC and DOGE (ALL CAPS PLOX)
-
-anxpro api took a shit as i was running the final tests on the current 'build' so I didn't get a proper test but it should work fine.
 
 You need a working LAMP setup.  It might work with windows, i don't know and i don't care to test.
 You need a working CGminer (Kalroth fork is what i'm testing against).
@@ -54,5 +51,6 @@ ROADMAP:
 
 7: General beautification.
 
+8: Support for Litecoin and others...
 
 DMJWnz4YkpyqVUUMM2GNbt6FmjfkcgnM58  /me loves the D...  I promise to share with Krezdorn if we ever manage to net a donation.
