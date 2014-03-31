@@ -1,7 +1,7 @@
 ANUBIS-altcoin
 ==============
 
-Fork of the existing ANUBIS project with support for Doge and POT.
+Fork of the existing ANUBIS project with support for BTC, DOGE, POT, VTC.
 
 
 You need a working LAMP setup.  It might work with windows, i don't know and i don't care to test.
