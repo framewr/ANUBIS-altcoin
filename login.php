@@ -84,7 +84,8 @@ function create_accgroups_table()
   $dbh->query($tblstr);
   $instblstr = "INSERT INTO `accgroups` (`name`, `currency`) VALUES
 				('BTC', 'USD'),
-				('DOGE', 'USD');";
+				('DOGE', 'USD'),
+				('POT', 'BTC');";
   $cri = $dbh->exec($instblstr);
 db_error();
 }
@@ -106,7 +107,8 @@ function create_exchanges_table()
   
   $instblstr = "INSERT INTO `exchanges` (`id`, `group`, `name`, `value`, `updated`) VALUES
 				(1, 1, 'BitStamp', '459.04000000', '2014-03-30 21:27:02'),
-				(2, 2, 'ANXPRO', '0.00050300', '2014-03-30 21:27:03');";
+				(2, 2, 'ANXPRO', '0.00050300', '2014-03-30 21:27:03'),
+				(3, 3, 'POT', '0.00001025', '2014-03-31 17:39:03');";
 
 $cri = $dbh->exec($instblstr);
 db_error();
