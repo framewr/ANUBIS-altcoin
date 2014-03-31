@@ -69,6 +69,11 @@ $pot_exchange = $pot_info['name'];
 $pot_value = $pot_info['value'];
 $pot_updated = $pot_info['updated'];
 
+$vtc_info = get_coin_info($dbh, $group = '4');
+$vtc_exchange = $vtc_info['name'];
+$vtc_value = $vtc_info['value'];
+$vtc_updated = $vtc_info['updated'];
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -258,6 +263,55 @@ ddsmoothmenu.init({
       			Address: <input type='text' name='address'>&nbsp;
       			<input type='submit' value='Add Account' name='addacc'>
       			<input type='hidden' name='groupid' value='3'>
+      			&nbsp; &nbsp;
+      			<input type='submit' value='Delete selected' name='delete'>
+    		</th>
+  		</tr>
+  </table>
+</form>
+<!-- do the VTC -->
+<form name=add action='accounts.php' method='post'>
+	<table id='rounded-corner' summary='GroupSummary'>
+		<tr>
+			<th colspan='7'>VTC <em>as of <? echo $vtc_updated; ?></em></th>
+		</tr>
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<th>
+				Account Name
+			</th>
+			<th>
+				Account Address
+			</th>
+			<th>
+				Received
+			</th>
+			<th>
+				Sent
+			</th>
+			<th>
+				Balance
+			</th>
+			<th>
+				1VTC = $<? echo $vtc_value; ?> 
+			</th>
+		</tr>
+			<? get_print_wallets($group = '4'); ?>
+		<tr>
+			<th>
+				<input type='checkbox' name='deletegrp' value='1'>
+			</th>
+		
+			<? get_coin_totals($group = '4'); ?>
+		</tr>
+		<tr>
+    		<th colspan='7'>
+      			Name: <input type='text' name='name'>&nbsp;
+      			Address: <input type='text' name='address'>&nbsp;
+      			<input type='submit' value='Add Account' name='addacc'>
+      			<input type='hidden' name='groupid' value='4'>
       			&nbsp; &nbsp;
       			<input type='submit' value='Delete selected' name='delete'>
     		</th>

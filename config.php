@@ -177,6 +177,7 @@ echo "<b>Configuration updated !</b>";
 
 <table id="rounded-corner" summary="Hostsummary" align="center">
     <thead>
+    	<tr><th colspan="3"><strong>GPU CONFIG</strong></th></tr>
     	<tr>
     		<th scope="col" class="rounded-company">Value</th>
         	<th scope="col" class="rounded-company">Yellow</th>

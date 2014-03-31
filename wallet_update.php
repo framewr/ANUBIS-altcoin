@@ -53,6 +53,16 @@ function blockchain_paths($coin)
 	$blockchain['addr_path'] = 'address/';
 	return $blockchain;
 	}
+	if ($coin == 'VTC')
+	{
+	$blockchain['url'] = 'http://explorer.vertcoin.org/';
+	$blockchain['addr_options'] = '';
+	$blockchain['addr_path_balance'] = 'chain/vertcoin/q/addressbalance/';
+	$blockchain['addr_path_received'] = 'chain/vertcoin/q/getreceivedbyaddress/';
+	$blockchain['addr_path_sent'] = 'chain/vertcoin/q/getsentbyaddress/';
+	$blockchain['addr_path'] = 'address/';
+	return $blockchain;
+	}
 	
 }
 
@@ -111,7 +121,7 @@ if ($grp_result)
       db_error();
 
 }
-
+// update main POT value (in kinda satoshi)
 $grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'POT' ORDER BY name ASC");
   db_error();
 
@@ -128,7 +138,23 @@ if ($grp_result)
 		$updr = $dbh->exec($updq);
 		db_error();
 }
+// update main VTC value
+$grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'VTC' ORDER BY name ASC");
+  db_error();
 
+if ($grp_result)
+{
+	$prelude_url = "https://api.prelude.io/last-usd/VTC";
+	$context = stream_context_create($opts);
+	$url_data = file_get_contents($prelude_url,false,$context);
+	$prelude_arr = json_decode($url_data, true);
+	
+	$VTC_exchange_rate = $prelude_arr['last'];
+	GLOBAL $VTC_exchange_rate;
+		$updq = "UPDATE exchanges SET value = '$VTC_exchange_rate', updated =now() WHERE name = 'VTC'";
+		$updr = $dbh->exec($updq);
+		db_error();
+}
 
 
 // seems i forgot to implement this function....
@@ -212,6 +238,25 @@ if ($account_result)
 			$btc_coin_value = $coin_info['value'] * $coin_balance;
 			$btc_info = get_coin_info($dbh, $group = '1');
 			$coin_value = $btc_info['value'] * $btc_coin_value;
+			$updq = "UPDATE accounts SET received = '$coin_received', sent = '$coin_sent', balance = '$coin_balance', value = '$coin_value', updated = now() WHERE address = '$address'";
+			$updr = $dbh->exec($updq);
+			db_error();
+		}
+		if ($group == '4')
+		{
+			GLOBAL $opts;
+			$blockchain_paths = blockchain_paths('VTC');
+			$url = $blockchain_paths['url'] . $blockchain_paths['addr_path_received'] . $address;
+			$context  = stream_context_create($opts);
+			$coin_received = file_get_contents($url,false,$context);
+			$url = $blockchain_paths['url'] . $blockchain_paths['addr_path_sent'] . $address;
+			$context  = stream_context_create($opts);
+			$coin_sent = file_get_contents($url,false,$context);
+			$url = $blockchain_paths['url'] . $blockchain_paths['addr_path_balance'] . $address;
+			$context  = stream_context_create($opts);
+			$coin_balance= file_get_contents($url,false,$context);
+			$coin_info = get_coin_info($dbh, $group = '4');
+			$coin_value = $coin_info['value'] * $coin_balance;
 			$updq = "UPDATE accounts SET received = '$coin_received', sent = '$coin_sent', balance = '$coin_balance', value = '$coin_value', updated = now() WHERE address = '$address'";
 			$updr = $dbh->exec($updq);
 			db_error();
