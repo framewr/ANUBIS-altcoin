@@ -1,5 +1,6 @@
 <?php
 require("config.inc.php");
+require("acc.inc.php");
 
 $dbh = anubis_db_connect();
 
@@ -8,6 +9,71 @@ if ( !is_logged_in() )
 	{
 		header('Location: login.php');
 	}
+
+if (isset($_POST['savegroupconf'])) {
+	$updstring = "";
+	
+	if (isset($_POST['BTC'])) {
+		$enabled_val = $_POST['BTC'];
+		if ($enabled_val > 0)
+		{
+		$updq = "UPDATE accgroups SET enabled = '1' WHERE name = 'BTC'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}else {
+			$updq = "UPDATE accgroups SET enabled = '0' WHERE name = 'BTC'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}
+	}
+	if (isset($_POST['DOGE'])) {
+		$enabled_val = $_POST['DOGE'];
+		if ($enabled_val > 0)
+		{
+		$updq = "UPDATE accgroups SET enabled = '1' WHERE name = 'DOGE'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}else {
+			$updq = "UPDATE accgroups SET enabled = '0' WHERE name = 'DOGE'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}
+	}
+	if (isset($_POST['POT'])) {
+		$enabled_val = $_POST['POT'];
+		if ($enabled_val > 0)
+		{
+		$updq = "UPDATE accgroups SET enabled = '1' WHERE name = 'POT'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}else {
+			$updq = "UPDATE accgroups SET enabled = '0' WHERE name = 'POT'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}
+	}
+	if (isset($_POST['VTC'])) {
+		$enabled_val = $_POST['VTC'];
+		if ($enabled_val > 0)
+		{
+		$updq = "UPDATE accgroups SET enabled = '1' WHERE name = 'VTC'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}else {
+			$updq = "UPDATE accgroups SET enabled = '0' WHERE name = 'VTC'";
+			$updr = $dbh->exec($updq);
+			db_error();
+			$updated = '1';
+		}
+	}
+}
 
 if (isset($_POST['saveconf'])) {
 	$updstring = "";
@@ -112,6 +178,9 @@ if (isset($_POST['saveconf'])) {
 	//echo "Final Updstring: $updstring !";
 
 }
+
+
+
 
 $configq = $dbh->query('SELECT * FROM configuration');
 db_error();
@@ -240,7 +309,79 @@ echo "<b>Configuration updated !</b>";
 </table>
 
 </form>                
-                
+       
+       
+<form name=save-group action="config.php" method="post">
+
+
+<table id="rounded-corner" summary="Hostsummary" align="center">
+    <thead>
+    	<tr><th colspan="3"><strong>Account Group Config</strong></th></tr>
+    	<tr>
+    		<th scope="col" class="rounded-company">Coin</th>
+        	<th scope="col" class="rounded-company">Enabled</th>
+        	<th scope="col" class="rounded-company">Disabled</th>
+        </tr>
+        <tr>
+        <td class="blue">BTC</td>
+        <?php if (is_group_enabled($dbh, '1') == '1')
+		{
+			echo '
+        <td><input type=radio name="BTC" value="1" checked></td>
+        <td><input type=radio name="BTC" value="0"></td>';
+		}else{
+			echo '
+        <td><input type=radio name="BTC" value="1"></td>
+        <td><input type=radio name="BTC" value="0"checked></td>';
+		} ?>
+        </tr>
+        <tr>
+        <td class="blue">DOGE</td>
+         <?php if (is_group_enabled($dbh, '2') == '1')
+		{
+			echo '
+        <td><input type=radio name="DOGE" value="1" checked></td>
+        <td><input type=radio name="DOGE" value="0"></td>';
+		}else{
+			echo '
+        <td><input type=radio name="DOGE" value="1"></td>
+        <td><input type=radio name="DOGE" value="0"checked></td>';
+		} ?>
+        </tr>
+        <tr>
+        <td class="blue">POT</td>
+        <?php if (is_group_enabled($dbh, '3') == '1')
+		{
+			echo '
+        <td><input type=radio name="POT" value="1" checked></td>
+        <td><input type=radio name="POT" value="0"></td>';
+		}else{
+			echo '
+        <td><input type=radio name="POT" value="1"></td>
+        <td><input type=radio name="POT" value="0"checked></td>';
+		} ?>
+        </tr>
+        <tr>
+        <td class="blue">VTC</td>
+        <?php if (is_group_enabled($dbh, '4') == '1')
+		{
+			echo '
+        <td><input type=radio name="VTC" value="1" checked></td>
+        <td><input type=radio name="VTC" value="0"></td>';
+		}else{
+			echo '
+        <td><input type=radio name="VTC" value="1"></td>
+        <td><input type=radio name="VTC" value="0"checked></td>';
+		} ?>
+        </tr>
+        <tr>
+        <td colspan="3" class="blue"><input type=submit name=savegroupconf value="Save"></td>
+        </tr> 
+    </thead>
+   </table>
+  </form>
+  
+  
                 
                 <div class="cleaner h20"></div>
 <!--                 <a href="#" class="more float_r"></a> -->

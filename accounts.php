@@ -59,7 +59,7 @@ $btc_exchange = $btc_info['name'];
 $btc_value = $btc_info['value'];
 $btc_updated = $btc_info['updated'];
 
-$doge_info = get_coin_info($dbh, $group = '2');
+$doge_info = get_coin_info($dbh, $group = '5');
 $doge_exchange = $doge_info['name'];
 $doge_value = $doge_info['value'];
 $doge_updated = $doge_info['updated'];
@@ -122,11 +122,14 @@ ddsmoothmenu.init({
             	<h2>Accounts</h2>
                 <div class="cleaner h20"></div>
 
-
+<?php
+if (is_group_enabled($dbh, '1') == 1)
+{
+	echo "
 <form name=add action='accounts.php' method='post'>
 	<table id='rounded-corner' summary='GroupSummary'>
 		<tr>
-			<th colspan='7'>฿TC <em>as of <? echo $btc_updated; ?></em></th>
+			<th colspan='7'>฿TC <em>as of  $btc_updated</em></th>
 		</tr>
 		<tr>
 			<th>
@@ -148,16 +151,18 @@ ddsmoothmenu.init({
 				Balance
 			</th>
 			<th>
-				1฿ = USD $<? echo $btc_value; ?>
+				1฿ = USD $$btc_value
 			</th>
-		</tr>
-			<? get_print_wallets($group = '1'); ?>
+		</tr>";
+		get_print_wallets($group = '1');
+		echo "
 		<tr>
 			<th>
 				<input type='checkbox' name='deletegrp' value='1'>
-			</th>
+			</th>";
 		
-			<? get_coin_totals($group = '1'); ?>
+		get_coin_totals($group = '1');
+		echo "
 		</tr>
 		<tr>
     		<th colspan='7'>
@@ -171,11 +176,16 @@ ddsmoothmenu.init({
   		</tr>
   </table>
 </form>
+";
+}
+if (is_group_enabled($dbh, '2') == 1)
+{
+	echo "
 <!-- do the DOGE -->
 <form name=add action='accounts.php' method='post'>
 	<table id='rounded-corner' summary='GroupSummary'>
 		<tr>
-			<th colspan='7'>ÐOGE <em>as of <? echo $doge_updated; ?></em></th>
+			<th colspan='7'>ÐOGE <em>as of $doge_updated</em></th>
 		</tr>
 		<tr>
 			<th>
@@ -197,16 +207,18 @@ ddsmoothmenu.init({
 				Balance
 			</th>
 			<th>
-				1Ð = USD $<? echo $doge_value; ?>
+				1Ð = USD $$doge_value
 			</th>
-		</tr>
-			<? get_print_wallets($group = '2'); ?>
+		</tr>";
+			get_print_wallets($group = '5');
+			echo "
 		<tr>
 			<th>
 				<input type='checkbox' name='deletegrp' value='1'>
 			</th>
-		
-			<? get_coin_totals($group = '2'); ?>
+		";
+			get_coin_totals($group = '5');
+			echo "
 		</tr>
 		<tr>
     		<th colspan='7'>
@@ -219,12 +231,16 @@ ddsmoothmenu.init({
     		</th>
   		</tr>
   </table>
-</form>
+</form>";
+}
+if (is_group_enabled($dbh, '3') == 1)
+{
+	echo "
 <!-- do the POT -->
 <form name=add action='accounts.php' method='post'>
 	<table id='rounded-corner' summary='GroupSummary'>
 		<tr>
-			<th colspan='7'>POT <em>as of <? echo $pot_updated; ?></em></th>
+			<th colspan='7'>POT <em>as of $pot_updated</em></th>
 		</tr>
 		<tr>
 			<th>
@@ -246,16 +262,18 @@ ddsmoothmenu.init({
 				Balance
 			</th>
 			<th>
-				1POT = ฿TC <? echo $pot_value; ?> 
+				1POT = ฿TC $pot_value
 			</th>
-		</tr>
-			<? get_print_wallets($group = '3'); ?>
+		</tr>";
+			get_print_wallets($group = '3');
+			echo "
 		<tr>
 			<th>
 				<input type='checkbox' name='deletegrp' value='1'>
-			</th>
+			</th>";
 		
-			<? get_coin_totals($group = '3'); ?>
+			get_coin_totals($group = '3');
+			echo "
 		</tr>
 		<tr>
     		<th colspan='7'>
@@ -268,12 +286,16 @@ ddsmoothmenu.init({
     		</th>
   		</tr>
   </table>
-</form>
+</form>";
+}
+if (is_group_enabled($dbh, '4') == 1)
+{
+	echo "
 <!-- do the VTC -->
 <form name=add action='accounts.php' method='post'>
 	<table id='rounded-corner' summary='GroupSummary'>
 		<tr>
-			<th colspan='7'>VTC <em>as of <? echo $vtc_updated; ?></em></th>
+			<th colspan='7'>VTC <em>as of $vtc_updated</em></th>
 		</tr>
 		<tr>
 			<th>
@@ -295,16 +317,18 @@ ddsmoothmenu.init({
 				Balance
 			</th>
 			<th>
-				1VTC = $<? echo $vtc_value; ?> 
+				1VTC = $$vtc_value 
 			</th>
-		</tr>
-			<? get_print_wallets($group = '4'); ?>
+		</tr>";
+			get_print_wallets($group = '4');
+			echo "
 		<tr>
 			<th>
 				<input type='checkbox' name='deletegrp' value='1'>
-			</th>
+			</th>";
 		
-			<? get_coin_totals($group = '4'); ?>
+			get_coin_totals($group = '4');
+			echo "
 		</tr>
 		<tr>
     		<th colspan='7'>
@@ -317,7 +341,9 @@ ddsmoothmenu.init({
     		</th>
   		</tr>
   </table>
-</form>
+</form>";
+}
+?>
 <form name=save action="accounts.php" method="post">
 <table id="savetable" align=center>
     <thead>

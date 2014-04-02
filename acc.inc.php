@@ -24,6 +24,19 @@ function get_coin_info($dbh, $group)
 	  
 }
 
+function is_group_enabled($dbh, $group)
+{
+	$infos_q = $dbh->query("SELECT * FROM `accgroups` WHERE `id` = '$group' AND `enabled` = '1' LIMIT 1");
+	db_error();
+	if ($infos_q)
+	{
+		while ($infos_q_data = $infos_q->fetch(PDO::FETCH_ASSOC))
+		{
+			$enabled = $infos_q_data['enabled'];
+		}
+		return $enabled;
+	}
+}
 
 function get_print_wallets($group)
 {
@@ -49,6 +62,8 @@ function get_print_wallets($group)
 		  $a_url = "http://www.dogechain.info/address/";
 		  if ($group == '3')
 		  $a_url = "http://potchain.aprikos.net/address/";
+		  if ($group == '4')
+		  $a_url = "https://explorer.vertcoin.org/address/";
 		  $line = "
 		  		<tr>
 		  			<td>

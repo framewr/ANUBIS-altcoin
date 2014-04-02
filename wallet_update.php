@@ -119,7 +119,6 @@ if ($grp_result)
       $updq = "UPDATE exchanges SET value = '$DOGE_exchange_rate', updated =now() WHERE name = 'ANXPRO'";
       $updr = $dbh->exec($updq);
       db_error();
-
 }
 // update main POT value (in kinda satoshi)
 $grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'POT' ORDER BY name ASC");
@@ -161,6 +160,21 @@ if ($grp_result)
 		db_error();
 }
 
+$grp_result = $dbh->query("SELECT * FROM accgroups WHERE name = 'PRELUDE-DOGE' ORDER BY name ASC");
+  db_error();
+
+if ($grp_result)
+{
+	$prelude_url = "https://api.prelude.io/last-usd/DOGE";
+	$context = stream_context_create($opts);
+	$url_data = file_get_contents($prelude_url,false,$context);
+	$prelude_arr = json_decode($url_data, true);
+	$DOGE_PRELUDE_exchange_rate = $prelude_arr['last'];
+	GLOBAL $DOGE_PRELUDE_exchange_rate;
+		$updq = "UPDATE exchanges SET value = '$DOGE_PRELUDE_exchange_rate', updated =now() WHERE name = 'PRELUDE-DOGE'";
+		$updr = $dbh->exec($updq);
+		db_error();
+}
 
 // seems i forgot to implement this function....
 function wallet_update($address, $received, $sent, $balance, $value)
@@ -206,7 +220,7 @@ if ($account_result)
 			$updr = $dbh->exec($updq);
 			db_error();
 		}
-		// see if it's a DOGE wallet and react
+		// see if it's a DOGE wallet and react (ANXPRO)
 		if ($group == '2')
 		{
 			GLOBAL $opts;
@@ -263,6 +277,24 @@ if ($account_result)
 			$coin_info = get_coin_info($dbh, $group = '4');
 			$coin_value = $coin_info['value'] * $coin_balance;
 			$updq = "UPDATE accounts SET received = '$coin_received', sent = '$coin_sent', balance = '$coin_balance', value = '$coin_value', updated = now() WHERE address = '$address'";
+			$updr = $dbh->exec($updq);
+			db_error();
+		}
+		if ($group == '5')
+		{
+			GLOBAL $opts;
+			$url = $blockchain_url_doge . $blockchain_addr_path_received . $address;
+			$context  = stream_context_create($opts);
+			$doge_received = file_get_contents($url,false,$context);
+			$url = $blockchain_url_doge . $blockchain_addr_path_sent . $address;
+			$context  = stream_context_create($opts);
+			$doge_sent = file_get_contents($url,false,$context);
+			$url = $blockchain_url_doge . $blockchain_addr_path_balance . $address;
+			$context  = stream_context_create($opts);
+			$doge_balance= file_get_contents($url,false,$context);
+			$doge_info = get_coin_info($dbh, $group = '5');
+			$doge_value = $doge_info['value'] * $doge_balance;
+			$updq = "UPDATE accounts SET received = '$doge_received', sent = '$doge_sent', balance = '$doge_balance', value = '$doge_value', updated = now() WHERE address = '$address'";
 			$updr = $dbh->exec($updq);
 			db_error();
 		}
