@@ -78,14 +78,15 @@ function create_accgroups_table()
   CREATE TABLE IF NOT EXISTS `accgroups` (
     `id` ".$primary_key. ",
     `name` varchar(255) NOT NULL,
-    `currency` varchar(3) NOT NULL DEFAULT 'USD'
+    `currency` varchar(3) NOT NULL DEFAULT 'USD',
+    `enabled` int(1) NOT NULL DEFAULT '1'
   )".$table_props.";";
 
   $dbh->query($tblstr);
-  $instblstr = "INSERT INTO `accgroups` (`name`, `currency`) VALUES
-				('BTC', 'USD'),
-				('DOGE', 'USD'),
-				('POT', 'BTC'),
+  $instblstr = "INSERT INTO `accgroups` (`name`, `currency`, `enabled`) VALUES
+				('BTC', 'USD', '1'),
+				('DOGE', 'USD', '1'),
+				('POT', 'BTC', '1'),
 				('VTC', 'USD');";
   $cri = $dbh->exec($instblstr);
 db_error();
