@@ -87,7 +87,7 @@ function create_accgroups_table()
 				('BTC', 'USD', '1'),
 				('DOGE', 'USD', '1'),
 				('POT', 'BTC', '1'),
-				('VTC', 'USD');";
+				('VTC', 'USD', '0');";
   $cri = $dbh->exec($instblstr);
 db_error();
 }
